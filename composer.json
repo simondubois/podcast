@@ -11,8 +11,10 @@
     },
     "require-dev": {
         "fzaninotto/faker": "^1.4",
+        "mockery/mockery": "^1.0",
+        "phpmd/phpmd": "^2.8",
         "phpunit/phpunit": "^8.0",
-        "mockery/mockery": "^1.0"
+        "squizlabs/php_codesniffer": "^3.4"
     },
     "autoload": {
         "classmap": [

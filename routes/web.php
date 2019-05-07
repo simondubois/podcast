@@ -1,5 +1,7 @@
 <?php
 
+use App\Collections\EpisodeCollection;
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -11,6 +13,21 @@
 |
 */
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
+$router->get('/', function (EpisodeCollection $episodes) {
+    return view('layout', [
+        'description' => env('PODCAST_DESCRIPTION'),
+        'episodes' => $episodes,
+        'image' => env('PODCAST_IMAGE'),
+        'title' => env('PODCAST_TITLE'),
+    ]);
+});
+
+$router->get('feed', function (EpisodeCollection $episodes) {
+    return $episodes->publishing()->reverse();
+});
+
+$router->get('/download/{id}', function (EpisodeCollection $episodes, string $id) {
+    return response()->download(
+        optional($episodes->firstWhere('id', $id))->path ?: abort(404)
+    );
 });

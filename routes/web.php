@@ -14,12 +14,7 @@ use App\Collections\EpisodeCollection;
 */
 
 $router->get('/', function (EpisodeCollection $episodes) {
-    return view('layout', [
-        'description' => env('PODCAST_DESCRIPTION'),
-        'episodes' => $episodes,
-        'image' => env('PODCAST_IMAGE'),
-        'title' => env('PODCAST_TITLE'),
-    ]);
+    return view('layout', ['episodes' => $episodes]);
 });
 
 $router->get('feed', function (EpisodeCollection $episodes) {

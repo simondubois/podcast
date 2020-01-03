@@ -1,0 +1,51 @@
+#/bin/bash
+
+export PATH=$PATH:./vendor/bin:./node_modules/.bin
+export HISTFILE=$HOME/.bash_history_podcast
+touch $HISTFILE
+
+function dev-install {
+    # git clone git@github.com:simondubois/podcast.git ./
+    composer install
+    cp .env.example .env
+    sed -i "" "s/APP_KEY=.*/APP_KEY="`php -r 'echo md5(uniqid())."\n";'`"/g" .env
+}
+
+function prod-update {
+    nuitsnoires-update
+    ovsg-update
+    ovsg2-update
+    rvax-update
+}
+
+function nuitsnoires-update {
+    ssh $DESK_PODCAST_NUITSNOIRES_HOST "cd $DESK_PODCAST_NUITSNOIRES_PATH && git fetch"
+    ssh $DESK_PODCAST_NUITSNOIRES_HOST "cd $DESK_PODCAST_NUITSNOIRES_PATH && git reset origin/master --hard"
+    ssh $DESK_PODCAST_NUITSNOIRES_HOST "cd $DESK_PODCAST_NUITSNOIRES_PATH && php-7.3 composer install --optimize-autoloader --no-dev"
+    ssh $DESK_PODCAST_NUITSNOIRES_HOST "cd $DESK_PODCAST_NUITSNOIRES_PATH && rm storage/framework/views/*.php"
+    open $DESK_PODCAST_NUITSNOIRES_URL
+}
+
+function ovsg-update {
+    ssh $DESK_PODCAST_OVSG_HOST "cd $DESK_PODCAST_OVSG_PATH && git fetch"
+    ssh $DESK_PODCAST_OVSG_HOST "cd $DESK_PODCAST_OVSG_PATH && git reset origin/master --hard"
+    ssh $DESK_PODCAST_OVSG_HOST "cd $DESK_PODCAST_OVSG_PATH && php-7.3 composer install --optimize-autoloader --no-dev"
+    ssh $DESK_PODCAST_OVSG_HOST "cd $DESK_PODCAST_OVSG_PATH && rm storage/framework/views/*.php"
+    open $DESK_PODCAST_OVSG_URL
+}
+
+function ovsg2-update {
+    ssh $DESK_PODCAST_OVSG2_HOST "cd $DESK_PODCAST_OVSG2_PATH && git fetch"
+    ssh $DESK_PODCAST_OVSG2_HOST "cd $DESK_PODCAST_OVSG2_PATH && git reset origin/master --hard"
+    ssh $DESK_PODCAST_OVSG2_HOST "cd $DESK_PODCAST_OVSG2_PATH && php-7.3 composer install --optimize-autoloader --no-dev"
+    ssh $DESK_PODCAST_OVSG2_HOST "cd $DESK_PODCAST_OVSG2_PATH && rm storage/framework/views/*.php"
+    open $DESK_PODCAST_OVSG2_URL
+}
+
+function rvax-update {
+    ssh $DESK_PODCAST_RVAX_HOST "cd $DESK_PODCAST_RVAX_PATH && git fetch"
+    ssh $DESK_PODCAST_RVAX_HOST "cd $DESK_PODCAST_RVAX_PATH && git reset origin/master --hard"
+    ssh $DESK_PODCAST_RVAX_HOST "cd $DESK_PODCAST_RVAX_PATH && php-7.3 composer install --optimize-autoloader --no-dev"
+    ssh $DESK_PODCAST_RVAX_HOST "cd $DESK_PODCAST_RVAX_PATH && rm storage/framework/views/*.php"
+    open $DESK_PODCAST_RVAX_URL
+}
